@@ -43,6 +43,7 @@ class profile_field_file extends profile_field_base {
      */
     public function display_data() {
         global $CFG;
+        global $count;
         // Default formatting.
         $data = parent::display_data();
 
@@ -63,7 +64,8 @@ class profile_field_file extends profile_field_base {
                     $file->get_filepath() .
                     $file->get_filename();
             $url = file_encode_url("$CFG->wwwroot/pluginfile.php", $path, true);
-            $filename = $file->get_filename();
+            $filename = $file->get_filename() . $count;
+            $count++;
             $data[] = html_writer::link($url, $filename);
         }
 
@@ -128,7 +130,7 @@ class profile_field_file extends profile_field_base {
      * @return  mixed
      */
     public function edit_save_data_preprocess($data, $datarecord) {
-        return 0;  // we set it to zero because this value is actually redaundant
+        return 0;   // we set it to zero because this value is actually redaundant
                     // it cannot be set to null or an empty string either because the field's
                     // value will not be shown on user's profile.
     }

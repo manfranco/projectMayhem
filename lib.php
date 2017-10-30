@@ -32,7 +32,7 @@ function profilefield_file_pluginfile($course, $cm, context $context, $filearea,
     if ($context->contextlevel != CONTEXT_USER) {
         return false;
     }
-    // verificar si el [area de moodle a la que se está accediendo es 
+    // verificar si el área de moodle a la que se está accediendo es 
     if (strpos($filearea, 'files_') !== 0) {
         return false;
     }
