@@ -1,14 +1,13 @@
 <?php
 /**
- * File profile field version information.
+ * Admin tool Mayhem version information.
  *
- * @package    profilefield_mayhem
- * @copyright  2014 onwards Shamim Rezaie {@link http://foodle.org}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    admintools_mayhem
+ * @copyright  2017 onwards Proyecto50 {@link http://www.eafit.edu.co/proyecto50/Paginas/inicio.aspx}
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2017103000;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2014050800;        // Requires this Moodle version
-$plugin->component = 'profilefield_mayhem'; // Full name of the plugin (used for diagnostics)
+$plugin->component = 'admintools_mayhem'; // Full name of the plugin (used for diagnostics)
