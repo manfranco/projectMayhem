@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version info.
+ * Messaging for Course Archiver.
  *
  * @package    tool_coursearchiver
  * @copyright  2015 Matthew Davidson
@@ -23,10 +23,9 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-$plugin = new stdClass();
-$plugin->version   = 2017110302;                // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2014111000;                // Requires this Moodle version.
-$plugin->component = 'tool_coursearchiver';     // Full name of the plugin (used for diagnostics).
-$plugin->release  = '3.3.1 (Build: 2016090200)';
-$plugin->maturity  = MATURITY_STABLE;
+$messageproviders = array (
+    // Notify teacher that a student has submitted a quiz attempt.
+    'courseowner' => array (
+        'capability'  => 'moodle/course:update'
+    )
+);
