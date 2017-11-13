@@ -18,7 +18,7 @@
  * Optout page.
  *
  * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
