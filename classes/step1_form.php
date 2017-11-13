@@ -42,11 +42,14 @@ class tool_coursearchiver_step1_form extends moodleform {
     public function definition () {
         $mform = $this->_form;
         $mform->addElement('header', 'searchhdr', get_string('search'));
-
         $mform->addElement('select',
                            'savestates',
                            get_string('resume', 'tool_coursearchiver'),
                            tool_coursearchiver_processor::get_saves());
+
+        $mform->addElement('filemanager', 'attechments', 'Upload File', null,
+                           array('subdirs' => 0, 'maxbytes' => $maxbytes, 'areamaxbytes' => 3221225472, 'maxfiles' => 50,
+                                 'accepted_types' => array('document'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL));
 
         $mform->addElement('text', 'searches[short]', get_string('courseshortname', 'tool_coursearchiver'));
         $mform->setType('searches[short]', PARAM_TEXT);
