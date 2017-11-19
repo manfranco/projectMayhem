@@ -17,8 +17,8 @@
 /**
  * Messaging for Course Archiver.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

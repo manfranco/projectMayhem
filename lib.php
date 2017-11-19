@@ -1,13 +1,12 @@
 <?php
-
-function mayhem_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+function MYPLUGIN_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
     // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
     if ($context->contextlevel != CONTEXT_MODULE) {
         return false; 
     }
  
     // Make sure the filearea is one of those used by the plugin.
-    if ($filearea !== 'uploads') {
+    if ($filearea !== 'expectedfilearea' && $filearea !== 'anotherexpectedfilearea') {
         return false;
     }
  
@@ -15,7 +14,7 @@ function mayhem_pluginfile($course, $cm, $context, $filearea, $args, $forcedownl
     require_login($course, true, $cm);
  
     // Check the relevant capabilities - these may vary depending on the filearea being accessed.
-    if (!has_capability('mod/MYPLUGIN:view', $context)) {
+    if (!has_capability('mod/tool_mayhe:view', $context)) {
         return false;
     }
  

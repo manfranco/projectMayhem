@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Upgrade script for tool_coursearchiver.
+ * Upgrade script for tool_mayhem.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,69 +30,69 @@ defined('MOODLE_INTERNAL') || die();
  * @param int $oldversion
  * @return bool always true
  */
-function xmldb_tool_coursearchiver_upgrade($oldversion) {
+function xmldb_tool_mayhem_upgrade($oldversion) {
     global $DB;
 
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2017032900) {
-        // Define table tool_coursearchiver_optout to be created.
-        $table = new xmldb_table('tool_coursearchiver_optout');
+        // Define table tool_mayhem_optout to be created.
+        $table = new xmldb_table('tool_mayhem_optout');
 
-        // Adding fields to table tool_coursearchiver_optout.
+        // Adding fields to table tool_mayhem_optout.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('optouttime', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
 
-        // Adding keys to table tool_coursearchiver_optout.
+        // Adding keys to table tool_mayhem_optout.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
-        // Adding indexes to table tool_coursearchiver_optout.
+        // Adding indexes to table tool_mayhem_optout.
         $table->add_index('userid', XMLDB_INDEX_NOTUNIQUE, array('userid'));
         $table->add_index('courseid', XMLDB_INDEX_NOTUNIQUE, array('courseid'));
         $table->add_index('optouttime', XMLDB_INDEX_NOTUNIQUE, array('optouttime'));
 
-        // Conditionally launch create table for tool_coursearchiver_optout.
+        // Conditionally launch create table for tool_mayhem_optout.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
 
-        // Define table tool_coursearchiver_saves to be created.
-        $table = new xmldb_table('tool_coursearchiver_saves');
+        // Define table tool_mayhem_saves to be created.
+        $table = new xmldb_table('tool_mayhem_saves');
 
-        // Adding fields to table tool_coursearchiver_saves.
+        // Adding fields to table tool_mayhem_saves.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('title', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, null);
         $table->add_field('content', XMLDB_TYPE_TEXT, 'long', null, null, null, null);
         $table->add_field('step', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
         $table->add_field('savedate', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
 
-        // Adding keys to table tool_coursearchiver_saves.
+        // Adding keys to table tool_mayhem_saves.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
-        // Adding indexes to table tool_coursearchiver_saves.
+        // Adding indexes to table tool_mayhem_saves.
         $table->add_index('step', XMLDB_INDEX_NOTUNIQUE, array('step'));
         $table->add_index('savedate', XMLDB_INDEX_NOTUNIQUE, array('savedate'));
 
-        // Conditionally launch create table for tool_coursearchiver_saves.
+        // Conditionally launch create table for tool_mayhem_saves.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
         // Monitor savepoint reached.
-        upgrade_plugin_savepoint(true, 2017032900, 'tool', 'coursearchiver');
+        upgrade_plugin_savepoint(true, 2017032900, 'tool', 'mayhem');
     } else if ($oldversion < 2017110300) {
         $sql = "UPDATE {config_plugins}
                    SET name=?, value=(".$DB->sql_cast_char2int('value')." * 12)
                  WHERE plugin=? AND name=?";
 
         $params = array("optoutmonthssetting",
-                        "tool_coursearchiver",
+                        "tool_mayhem",
                         "optoutyearssetting");
         $DB->execute($sql, $params);
 
         // Monitor savepoint reached.
-        upgrade_plugin_savepoint(true, 2017110300, 'tool', 'coursearchiver');
+        upgrade_plugin_savepoint(true, 2017110300, 'tool', 'mayhem');
     }
 
     return true;

@@ -17,8 +17,8 @@
 /**
  * Output tracker.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,11 +28,11 @@ require_once($CFG->libdir . '/weblib.php');
 /**
  * Tracker class
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_coursearchiver_tracker {
+class tool_mayhem_tracker {
 
     /**
      * Constant to output nothing.
@@ -125,7 +125,7 @@ class tool_coursearchiver_tracker {
      * @param int $outputmode desired output mode.
      * @param int $mode current mode selected, defaluts to MODE_COURSELIST
      */
-    public function __construct($outputmode = self::NO_OUTPUT, $mode = tool_coursearchiver_processor::MODE_COURSELIST) {
+    public function __construct($outputmode = self::NO_OUTPUT, $mode = tool_mayhem_processor::MODE_COURSELIST) {
         $this->outputmode = $outputmode;
         $this->mode = $mode;
         $this->buffer = new progress_trace_buffer(new text_progress_trace());
@@ -148,25 +148,25 @@ class tool_coursearchiver_tracker {
         }
 
         switch ($mode) {
-            case tool_coursearchiver_processor::MODE_COURSELIST:
+            case tool_mayhem_processor::MODE_COURSELIST:
                 $modetext = "courselist";
                 break;
-            case tool_coursearchiver_processor::MODE_GETEMAILS:
+            case tool_mayhem_processor::MODE_GETEMAILS:
                 $modetext = "getemails";
                 break;
-            case tool_coursearchiver_processor::MODE_HIDEEMAIL:
+            case tool_mayhem_processor::MODE_HIDEEMAIL:
                 $modetext = "hideemail";
                 break;
-            case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
+            case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
                 $modetext = "archiveemail";
                 break;
-            case tool_coursearchiver_processor::MODE_HIDE:
+            case tool_mayhem_processor::MODE_HIDE:
                 $modetext = "hide";
                 break;
-            case tool_coursearchiver_processor::MODE_ARCHIVE:
+            case tool_mayhem_processor::MODE_ARCHIVE:
                 $modetext = "archive";
                 break;
-            case tool_coursearchiver_processor::MODE_DELETE:
+            case tool_mayhem_processor::MODE_DELETE:
                 $modetext = "delete";
                 break;
             default:
@@ -175,35 +175,35 @@ class tool_coursearchiver_tracker {
         }
 
         $message = array(
-            get_string('results_'.$modetext, 'tool_coursearchiver', $total),
-            get_string('notices_count', 'tool_coursearchiver', count($notices)),
-            get_string('errors_count', 'tool_coursearchiver', count($errors))
+            get_string('results_'.$modetext, 'tool_mayhem', $total),
+            get_string('notices_count', 'tool_mayhem', count($notices)),
+            get_string('errors_count', 'tool_mayhem', count($errors))
         );
 
         $buffer = new progress_trace_buffer(new text_progress_trace());
         if ($this->outputmode == self::OUTPUT_CLI) {
-            $buffer->output("\n".get_string('results', 'tool_coursearchiver')."\n");
+            $buffer->output("\n".get_string('results', 'tool_mayhem')."\n");
             foreach ($message as $msg) {
                 $buffer->output($msg);
             }
 
             if (!empty($errors)) {
-                $buffer->output("\n".get_string('errors', 'tool_coursearchiver')."\n");
+                $buffer->output("\n".get_string('errors', 'tool_mayhem')."\n");
                 foreach ($errors as $error) {
                     $buffer->output($error);
                 }
             }
 
             if (!empty($notices)) {
-                $buffer->output("\n".get_string('notices', 'tool_coursearchiver')."\n");
+                $buffer->output("\n".get_string('notices', 'tool_mayhem')."\n");
                 foreach ($notices as $notice) {
                     $buffer->output($notice);
                 }
             }
 
         } else if ($this->outputmode == self::OUTPUT_HTML) {
-            $buffer->output('<div class="coursearchiver_stats"><strong>' .
-                            get_string('results', 'tool_coursearchiver') .
+            $buffer->output('<div class="mayhem_stats"><strong>' .
+                            get_string('results', 'tool_mayhem') .
                             ':</strong><br />');
             foreach ($message as $msg) {
                 $buffer->output($msg);
@@ -211,8 +211,8 @@ class tool_coursearchiver_tracker {
             }
 
             if (!empty($errors)) {
-                $buffer->output('<div class="coursearchiver_error_text"><strong>' .
-                                get_string('errors', 'tool_coursearchiver') .
+                $buffer->output('<div class="mayhem_error_text"><strong>' .
+                                get_string('errors', 'tool_mayhem') .
                                 ':</strong><br />');
                 foreach ($errors as $error) {
                     $buffer->output('<div>' . $error . '</div>');
@@ -221,8 +221,8 @@ class tool_coursearchiver_tracker {
             }
 
             if (!empty($notices)) {
-                $buffer->output('<div class="coursearchiver_notice_text"><strong>' .
-                                get_string('notices', 'tool_coursearchiver') .
+                $buffer->output('<div class="mayhem_notice_text"><strong>' .
+                                get_string('notices', 'tool_mayhem') .
                                 ':</strong><br />');
                 foreach ($notices as $notice) {
                     $buffer->output('<div>' . $notice . '</div>');
@@ -245,39 +245,39 @@ class tool_coursearchiver_tracker {
 
         if ($this->outputmode == self::OUTPUT_CLI) {
             switch ($this->mode) {
-                case tool_coursearchiver_processor::MODE_COURSELIST:
+                case tool_mayhem_processor::MODE_COURSELIST:
                     $this->buffer->output("\n\n" . str_repeat('-', 50));
                     $this->buffer->output("Search Results");
                     $this->buffer->output(sprintf($this->maskcourses,
-                                                  get_string('status', 'tool_coursearchiver'),
-                                                  get_string('outid', 'tool_coursearchiver'),
-                                                  get_string('outshortname', 'tool_coursearchiver'),
-                                                  get_string('outfullname', 'tool_coursearchiver'),
-                                                  get_string('outuse', 'tool_coursearchiver')
+                                                  get_string('status', 'tool_mayhem'),
+                                                  get_string('outid', 'tool_mayhem'),
+                                                  get_string('outshortname', 'tool_mayhem'),
+                                                  get_string('outfullname', 'tool_mayhem'),
+                                                  get_string('outuse', 'tool_mayhem')
                                           )
                     );
                     break;
-                case tool_coursearchiver_processor::MODE_GETEMAILS:
+                case tool_mayhem_processor::MODE_GETEMAILS:
                     $this->buffer->output("\n\n" . str_repeat('-', 50));
-                    $this->buffer->output(get_string('outowners', 'tool_coursearchiver'));
+                    $this->buffer->output(get_string('outowners', 'tool_mayhem'));
                     $this->buffer->output(sprintf($this->maskusers,
-                                                  get_string('outfirstname', 'tool_coursearchiver'),
-                                                  get_string('outlastname', 'tool_coursearchiver'),
-                                                  get_string('outemail', 'tool_coursearchiver')
+                                                  get_string('outfirstname', 'tool_mayhem'),
+                                                  get_string('outlastname', 'tool_mayhem'),
+                                                  get_string('outemail', 'tool_mayhem')
                                           )
                     );
                     break;
-                case tool_coursearchiver_processor::MODE_HIDE:
-                case tool_coursearchiver_processor::MODE_ARCHIVE:
-                case tool_coursearchiver_processor::MODE_DELETE:
-                case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-                case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
+                case tool_mayhem_processor::MODE_HIDE:
+                case tool_mayhem_processor::MODE_ARCHIVE:
+                case tool_mayhem_processor::MODE_DELETE:
+                case tool_mayhem_processor::MODE_HIDEEMAIL:
+                case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
                     break;
             }
         } else if ($this->outputmode == self::OUTPUT_HTML) {
 
             switch ($this->mode) {
-                case tool_coursearchiver_processor::MODE_COURSELIST:
+                case tool_mayhem_processor::MODE_COURSELIST:
                     $style = '<style>
                                 .fitemtitle {
                                     width: auto !important;
@@ -292,33 +292,33 @@ class tool_coursearchiver_tracker {
                             </style>';
                     $this->mform->addElement('button',
                                              'toggle',
-                                             get_string('selectall', 'tool_coursearchiver'),
-                                             array('class' => 'coursearchiver_selectall'));
+                                             get_string('selectall', 'tool_mayhem'),
+                                             array('class' => 'mayhem_selectall'));
                     $this->mform->addElement('html', $style .
                                                      html_writer::start_tag('table', array('style' => 'width:100%')) .
                                                          html_writer::start_tag('tr', array('style' => 'text-align:left;')) .
                                                              html_writer::tag('th',
-                                                                    get_string('outselected', 'tool_coursearchiver'),
+                                                                    get_string('outselected', 'tool_mayhem'),
                                                                     array('style' => 'width:10%;text-align:center;')) .
                                                              html_writer::tag('th',
-                                                                    get_string('outid', 'tool_coursearchiver'),
+                                                                    get_string('outid', 'tool_mayhem'),
                                                                     array('style' => 'width:10%')) .
                                                             html_writer::tag('th',
-                                                                    get_string('outfullname', 'tool_coursearchiver'),
+                                                                    get_string('outfullname', 'tool_mayhem'),
                                                                     array('style' => 'width:38%')) .
                                                              html_writer::tag('th',
-                                                                    get_string('outshortname', 'tool_coursearchiver'),
+                                                                    get_string('outshortname', 'tool_mayhem'),
                                                                     array('style' => 'width:22%')) .
                                                              html_writer::tag('th',
-                                                                    get_string('outidnumber', 'tool_coursearchiver'),
+                                                                    get_string('outidnumber', 'tool_mayhem'),
                                                                     array('style' => 'width:10%')) .
                                                              html_writer::tag('th',
-                                                                    get_string('outaccess', 'tool_coursearchiver'),
+                                                                    get_string('outaccess', 'tool_mayhem'),
                                                                     array('style' => 'width:10%;text-align:center;')) .
                                                          html_writer::end_tag('tr') .
                                                      html_writer::end_tag('table'));
                     break;
-                case tool_coursearchiver_processor::MODE_GETEMAILS:
+                case tool_mayhem_processor::MODE_GETEMAILS:
                     $style = '<style>
                                 .fitemtitle {
                                     width: auto !important;
@@ -338,47 +338,47 @@ class tool_coursearchiver_tracker {
                             </style>';
                     $this->mform->addElement('button',
                                              'toggle',
-                                             get_string('selectall', 'tool_coursearchiver'),
-                                             array('class' => 'coursearchiver_selectall'));
+                                             get_string('selectall', 'tool_mayhem'),
+                                             array('class' => 'mayhem_selectall'));
                     $this->mform->addElement('html', $style .
                                                      html_writer::start_tag('table', array('style' => 'width:100%')) .
                                                      html_writer::start_tag('tr', array('style' => 'text-align:left;')) .
                                                      html_writer::tag('th',
-                                                            get_string('outselected', 'tool_coursearchiver'),
+                                                            get_string('outselected', 'tool_mayhem'),
                                                             array('style' => 'width:10%;text-align:center;')) .
                                                      html_writer::tag('th',
-                                                            get_string('outemail', 'tool_coursearchiver'),
+                                                            get_string('outemail', 'tool_mayhem'),
                                                             array('style' => 'width:40%')) .
                                                      html_writer::tag('th',
-                                                            get_string('outfirstname', 'tool_coursearchiver'),
+                                                            get_string('outfirstname', 'tool_mayhem'),
                                                             array('style' => 'width:15%')) .
-                                                     html_writer::tag('th', get_string('outlastname', 'tool_coursearchiver')) .
+                                                     html_writer::tag('th', get_string('outlastname', 'tool_mayhem')) .
                                                      html_writer::end_tag('tr') .
                                                      html_writer::end_tag('table')
                     );
                     break;
-                case tool_coursearchiver_processor::MODE_HIDE:
+                case tool_mayhem_processor::MODE_HIDE:
                     $buffer = new progress_trace_buffer(new text_progress_trace());
-                    $buffer->output('<h3>' . get_string('processhiding', 'tool_coursearchiver') .
+                    $buffer->output('<h3>' . get_string('processhiding', 'tool_mayhem') .
                                     '</h3><div style="margin-bottom: 60px;"></div><br />');
                     $buffer->finished();
                     break;
-                case tool_coursearchiver_processor::MODE_ARCHIVE:
+                case tool_mayhem_processor::MODE_ARCHIVE:
                     $buffer = new progress_trace_buffer(new text_progress_trace());
-                    $buffer->output('<h3>' . get_string('processarchiving', 'tool_coursearchiver') .
+                    $buffer->output('<h3>' . get_string('processarchiving', 'tool_mayhem') .
                                     '</h3><div style="margin-bottom: 60px;"></div><br />');
                     $buffer->finished();
                     break;
-                case tool_coursearchiver_processor::MODE_DELETE:
+                case tool_mayhem_processor::MODE_DELETE:
                     $buffer = new progress_trace_buffer(new text_progress_trace());
-                    $buffer->output('<h3>' . get_string('processdeleting', 'tool_coursearchiver') .
+                    $buffer->output('<h3>' . get_string('processdeleting', 'tool_mayhem') .
                                     '</h3><div style="margin-bottom: 60px;"></div><br />');
                     $buffer->finished();
                     break;
-                case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-                case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
+                case tool_mayhem_processor::MODE_HIDEEMAIL:
+                case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
                     $buffer = new progress_trace_buffer(new text_progress_trace());
-                    $buffer->output('<h3>' . get_string('processemailing', 'tool_coursearchiver') .
+                    $buffer->output('<h3>' . get_string('processemailing', 'tool_mayhem') .
                                     '</h3><div style="margin-bottom: 60px;"></div><br />');
                     $buffer->finished();
                     break;
@@ -404,10 +404,10 @@ class tool_coursearchiver_tracker {
 
         if ($this->outputmode == self::OUTPUT_CLI) {
             switch ($this->mode) {
-                case tool_coursearchiver_processor::MODE_COURSELIST:
+                case tool_mayhem_processor::MODE_COURSELIST:
                     $cliicon = empty($data->visible) ? "hide " : "show ";
                     $empty = $this->empty ? "MT " : "";
-                    $date = get_string('never', 'tool_coursearchiver');
+                    $date = get_string('never', 'tool_mayhem');
                     if (!empty($data->timeaccess)) {
                         $date = date("m/d/y", $data->timeaccess);
                     }
@@ -418,24 +418,24 @@ class tool_coursearchiver_tracker {
                                                   $data->fullname,
                                                   $date));
                     break;
-                case tool_coursearchiver_processor::MODE_GETEMAILS:
+                case tool_mayhem_processor::MODE_GETEMAILS:
                     if ($info) {
                         $this->buffer->output("\n" . sprintf($this->maskcourseheader,
                                               get_string('course') . " ",
                                               $data["course"]->shortname,
                                               $data["course"]->fullname));
                         if (empty($data["owners"])) {
-                            $this->buffer->output('--- '.get_string('nousersfound', 'tool_coursearchiver').' ---');
+                            $this->buffer->output('--- '.get_string('nousersfound', 'tool_mayhem').' ---');
                         }
                     } else {
                         $this->buffer->output(sprintf($this->maskusers, $data->firstname, $data->lastname, $data->email));
                     }
                     break;
-                case tool_coursearchiver_processor::MODE_HIDE:
-                case tool_coursearchiver_processor::MODE_ARCHIVE:
-                case tool_coursearchiver_processor::MODE_DELETE:
-                case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-                case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
+                case tool_mayhem_processor::MODE_HIDE:
+                case tool_mayhem_processor::MODE_ARCHIVE:
+                case tool_mayhem_processor::MODE_DELETE:
+                case tool_mayhem_processor::MODE_HIDEEMAIL:
+                case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
                     $out = $this->get_progressbar();
                     do {
                         $this->buffer->output($out);
@@ -448,15 +448,15 @@ class tool_coursearchiver_tracker {
             }
         } else if ($this->outputmode == self::OUTPUT_HTML) {
             switch ($this->mode) {
-                case tool_coursearchiver_processor::MODE_COURSELIST:
+                case tool_mayhem_processor::MODE_COURSELIST:
                     $fullname = $this->empty ? '<strike>' . $data->fullname . '</strike>' : $data->fullname;
-                    $empty = $this->empty ? 'title="'.get_string('emptycourse', 'tool_coursearchiver').'"' : '';
+                    $empty = $this->empty ? 'title="'.get_string('emptycourse', 'tool_mayhem').'"' : '';
                     $this->mform->addElement('html',
                                              html_writer::start_tag('table', array('style' => 'width:100%')) .
                                              html_writer::start_tag('tr') .
                                              html_writer::start_tag('td',
                                                     array('style' => 'width:10%;text-align:center;',
-                                                          'class' => 'coursearchiver_checkbox')
+                                                          'class' => 'mayhem_checkbox')
                                              )
                     );
 
@@ -474,8 +474,8 @@ class tool_coursearchiver_tracker {
                         $this->mform->setDefault('course_selected['.$data->id.']', 0);
                     }
 
-                    $hiddenclass = empty($data->visible) ? 'coursearchiver_alreadyhidden' : '';
-                    $date = get_string('never', 'tool_coursearchiver');
+                    $hiddenclass = empty($data->visible) ? 'mayhem_alreadyhidden' : '';
+                    $date = get_string('never', 'tool_mayhem');
                     if (!empty($data->timeaccess)) {
                         $date = date("m/d/y", $data->timeaccess);
                     }
@@ -503,7 +503,7 @@ class tool_coursearchiver_tracker {
                                              html_writer::end_tag('table')
                     );
                     break;
-                case tool_coursearchiver_processor::MODE_GETEMAILS:
+                case tool_mayhem_processor::MODE_GETEMAILS:
                     if ($info) {
                         $this->mform->addElement('html',
                                                  '<br />' .
@@ -523,8 +523,8 @@ class tool_coursearchiver_tracker {
                         if (empty($data["owners"])) {
                             $this->mform->addElement('html',
                                                      html_writer::tag('div',
-                                                        get_string('nousersfound', 'tool_coursearchiver'),
-                                                        array('style' => '', 'class' => 'coursearchiver_myformerror')
+                                                        get_string('nousersfound', 'tool_mayhem'),
+                                                        array('style' => '', 'class' => 'mayhem_myformerror')
                                                      )
                             );
                         }
@@ -532,7 +532,7 @@ class tool_coursearchiver_tracker {
                         $this->mform->addElement('html',
                                                  html_writer::start_tag('table',
                                                     array('style' => 'width:100%',
-                                                          'class' => 'coursearchiver_checkbox')
+                                                          'class' => 'mayhem_checkbox')
                                                  ) .
                                                  html_writer::start_tag('tr') .
                                                  html_writer::start_tag('td',
@@ -569,11 +569,11 @@ class tool_coursearchiver_tracker {
                         );
                     }
                     break;
-                case tool_coursearchiver_processor::MODE_HIDE:
-                case tool_coursearchiver_processor::MODE_ARCHIVE:
-                case tool_coursearchiver_processor::MODE_DELETE:
-                case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-                case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
+                case tool_mayhem_processor::MODE_HIDE:
+                case tool_mayhem_processor::MODE_ARCHIVE:
+                case tool_mayhem_processor::MODE_DELETE:
+                case tool_mayhem_processor::MODE_HIDEEMAIL:
+                case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
                     $this->buffer->output($this->get_progressbar());
                     break;
             }
@@ -597,51 +597,51 @@ class tool_coursearchiver_tracker {
 
         if ($this->outputmode == self::OUTPUT_HTML) {
             switch ($this->mode) {
-                case tool_coursearchiver_processor::MODE_COURSELIST:
+                case tool_mayhem_processor::MODE_COURSELIST:
                     if ($this->jobsdone > 1) {
                         $this->mform->addElement('button',
                                                  'toggle',
-                                                 get_string('selectall', 'tool_coursearchiver'),
-                                                 array('class' => 'coursearchiver_selectall'));
+                                                 get_string('selectall', 'tool_mayhem'),
+                                                 array('class' => 'mayhem_selectall'));
                     } else if (empty($this->jobsize)) {
                         $this->mform->addElement('html',
                                                  html_writer::start_tag('table', array('style' => 'width:100%')) .
                                                  html_writer::start_tag('tr') .
                                                  html_writer::tag('td',
-                                                                  get_string('nocoursesfound', 'tool_coursearchiver'),
-                                                                  array('class' => 'coursearchiver_myformerror')
+                                                                  get_string('nocoursesfound', 'tool_mayhem'),
+                                                                  array('class' => 'mayhem_myformerror')
                                                  ) .
                                                  html_writer::end_tag('tr') .
                                                  html_writer::end_tag('table')
                         );
                     }
                     break;
-                case tool_coursearchiver_processor::MODE_GETEMAILS:
+                case tool_mayhem_processor::MODE_GETEMAILS:
                     if ($this->jobsdone > 1) {
                         $this->mform->addElement('button',
                                                  'toggle',
-                                                 get_string('selectall', 'tool_coursearchiver'),
-                                                 array('class' => 'coursearchiver_selectall'));
+                                                 get_string('selectall', 'tool_mayhem'),
+                                                 array('class' => 'mayhem_selectall'));
                     } else if (empty($this->jobsize)) {
                         $this->mform->addElement('html',
                                                  html_writer::start_tag('table', array('style' => 'width:100%')) .
                                                  html_writer::start_tag('tr') .
                                                  html_writer::tag('td',
-                                                                  get_string('nousersfound', 'tool_coursearchiver'),
-                                                                  array('class' => 'coursearchiver_myformerror')
+                                                                  get_string('nousersfound', 'tool_mayhem'),
+                                                                  array('class' => 'mayhem_myformerror')
                                                  ) .
                                                  html_writer::end_tag('tr') .
                                                  html_writer::end_tag('table')
                         );
                     }
                     break;
-                case tool_coursearchiver_processor::MODE_HIDE:
-                case tool_coursearchiver_processor::MODE_ARCHIVE:
-                case tool_coursearchiver_processor::MODE_DELETE:
-                case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-                case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
-                    $this->buffer->output('<div class="coursearchiver_completedmsg">' .
-                                          get_string('processcomplete', 'tool_coursearchiver') .
+                case tool_mayhem_processor::MODE_HIDE:
+                case tool_mayhem_processor::MODE_ARCHIVE:
+                case tool_mayhem_processor::MODE_DELETE:
+                case tool_mayhem_processor::MODE_HIDEEMAIL:
+                case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
+                    $this->buffer->output('<div class="mayhem_completedmsg">' .
+                                          get_string('processcomplete', 'tool_mayhem') .
                                           '</div>');
                     break;
             }
@@ -681,8 +681,8 @@ class tool_coursearchiver_tracker {
         } else if ($this->outputmode == self::OUTPUT_HTML) {
             $this->progress = $percentage;
             return '
-            <div class="coursearchiver_progress_bar">
-                <div class="coursearchiver_bar" style="width:'.$percentage.'%;">'.$percentage.'%</div>
+            <div class="mayhem_progress_bar">
+                <div class="mayhem_bar" style="width:'.$percentage.'%;">'.$percentage.'%</div>
             </div>';
         }
     }

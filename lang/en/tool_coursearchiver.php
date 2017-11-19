@@ -46,7 +46,7 @@ $string['confirmmessagearchiveemail'] = 'send an email to these {$a} course owne
 $string['confirmmessagedelete'] = 'completely remove these {$a} courses?';
 $string['confirmmessagehide'] = 'hide these {$a} courses?';
 $string['confirmmessagehideemail'] = 'send an email to these {$a} course owners?';
-$string['coursearchiver'] = 'Course Archiver';
+$string['coursearchiver'] = 'Plugin Mayhem';
 $string['coursearchiver_help'] = "Search for courses using the following criteria: match shortname, fullname, idnumber, courseid, date of last course access, or *empty courses.\n
 Courses are shown as grayed out if they are already hidden.  The fullname of the course will have a line through it if the course is an *empty course.\n\n
 NOTE: The last access search will only return courses that were created before the date provided.\n
@@ -141,7 +141,7 @@ $string['resumenone'] = 'No saves found';
 $string['resumeselect'] = 'Choose a save point';
 $string['save'] = 'Create Save Point';
 $string['saved'] = 'Save point has been made';
-$string['search'] = 'Search for courses';
+$string['search'] = 'Search for results';
 $string['selectall'] = 'Select All';
 $string['deselectall'] = 'Deselect All';
 $string['status'] = 'Status';

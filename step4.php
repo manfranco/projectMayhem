@@ -17,8 +17,8 @@
 /**
  * Step 4(Confirmation and Action).
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->libdir . '/adminlib.php');
 header('X-Accel-Buffering: no');
 
 require_login();
-admin_externalpage_setup('toolcoursearchiver');
+admin_externalpage_setup('toolmayhem');
 
 global $SESSION;
 $formdata   = isset($SESSION->formdata) ? $SESSION->formdata : optional_param('formdata', false, PARAM_RAW);
@@ -45,34 +45,34 @@ unset($SESSION->mode);
 
 if (!empty($submitted) && !empty($formdata) && !empty($mode)) { // FORM 4 SUBMITTED.
 
-    if ($submitted == get_string('back', 'tool_coursearchiver')) { // Button to start over has been pressed.
+    if ($submitted == get_string('back', 'tool_mayhem')) { // Button to start over has been pressed.
         unset($SESSION->formdata);
         unset($SESSION->mode);
         unset($SESSION->error);
-        $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php');
+        $returnurl = new moodle_url('/admin/tool/mayhem/index.php');
         redirect($returnurl);
     }
 
     if (!empty($error)) {
-        echo $OUTPUT->container($error, 'coursearchiver_myformerror');
+        echo $OUTPUT->container($error, 'mayhem_myformerror');
     }
 
-    if ($submitted == get_string('confirm', 'tool_coursearchiver')) {
-        if (!isset($mode) || !in_array($mode, array(tool_coursearchiver_processor::MODE_HIDE,
-                                                    tool_coursearchiver_processor::MODE_ARCHIVE,
-                                                    tool_coursearchiver_processor::MODE_DELETE,
-                                                    tool_coursearchiver_processor::MODE_HIDEEMAIL,
-                                                    tool_coursearchiver_processor::MODE_ARCHIVEEMAIL))) {
+    if ($submitted == get_string('confirm', 'tool_mayhem')) {
+        if (!isset($mode) || !in_array($mode, array(tool_mayhem_processor::MODE_HIDE,
+                                                    tool_mayhem_processor::MODE_ARCHIVE,
+                                                    tool_mayhem_processor::MODE_DELETE,
+                                                    tool_mayhem_processor::MODE_HIDEEMAIL,
+                                                    tool_mayhem_processor::MODE_ARCHIVEEMAIL))) {
             throw new coding_exception('Unknown process mode');
         }
 
         switch($mode){
-            case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-            case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
+            case tool_mayhem_processor::MODE_HIDEEMAIL:
+            case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
                 echo $OUTPUT->header();
-                echo $OUTPUT->heading_with_help(get_string('coursearchiver', 'tool_coursearchiver'),
-                                                'coursearchiver',
-                                                'tool_coursearchiver');
+                echo $OUTPUT->heading_with_help(get_string('mayhem', 'tool_mayhem'),
+                                                'mayhem',
+                                                'tool_mayhem');
 
                 $selected = unserialize($formdata);
                 $owners = array();
@@ -91,58 +91,58 @@ if (!empty($submitted) && !empty($formdata) && !empty($mode)) { // FORM 4 SUBMIT
 
                 if (!is_array($owners) || empty($owners)) { // If 0 courses are selected, show message and form again.
                     $SESSION->formdata = $formdata;
-                    $SESSION->error = get_string('nousersselected', 'tool_coursearchiver');
-                    $returnurl = new moodle_url('/admin/tool/coursearchiver/step3.php');
+                    $SESSION->error = get_string('nousersselected', 'tool_mayhem');
+                    $returnurl = new moodle_url('/admin/tool/mayhem/step3.php');
                     redirect($returnurl);
                 }
-                $processor = new tool_coursearchiver_processor(array("mode" => $mode, "data" => $owners));
-                $processor->execute(tool_coursearchiver_tracker::OUTPUT_HTML);
+                $processor = new tool_mayhem_processor(array("mode" => $mode, "data" => $owners));
+                $processor->execute(tool_mayhem_tracker::OUTPUT_HTML);
                 echo $OUTPUT->footer();
                 break;
-            case tool_coursearchiver_processor::MODE_HIDE:
-            case tool_coursearchiver_processor::MODE_ARCHIVE:
-            case tool_coursearchiver_processor::MODE_DELETE:
+            case tool_mayhem_processor::MODE_HIDE:
+            case tool_mayhem_processor::MODE_ARCHIVE:
+            case tool_mayhem_processor::MODE_DELETE:
                 echo $OUTPUT->header();
-                echo $OUTPUT->heading_with_help(get_string('coursearchiver', 'tool_coursearchiver'),
-                                                'coursearchiver',
-                                                'tool_coursearchiver');
+                echo $OUTPUT->heading_with_help(get_string('mayhem', 'tool_mayhem'),
+                                                'mayhem',
+                                                'tool_mayhem');
 
                 $courses = unserialize($formdata);
                 if (!is_array($courses) || empty($courses)) { // If 0 courses are selected, show message and form again.
                     $SESSION->formdata = $formdata;
-                    $SESSION->error = get_string('nocoursesselected', 'tool_coursearchiver');
-                    $returnurl = new moodle_url('/admin/tool/coursearchiver/step2.php');
+                    $SESSION->error = get_string('nocoursesselected', 'tool_mayhem');
+                    $returnurl = new moodle_url('/admin/tool/mayhem/step2.php');
                     redirect($returnurl);
                 }
-                $processor = new tool_coursearchiver_processor(array("mode" => $mode, "data" => $courses));
+                $processor = new tool_mayhem_processor(array("mode" => $mode, "data" => $courses));
                 if (!empty($folder)) {
                     $processor->folder = $folder;
                 }
-                $processor->execute(tool_coursearchiver_tracker::OUTPUT_HTML, null);
+                $processor->execute(tool_mayhem_tracker::OUTPUT_HTML, null);
                 echo $OUTPUT->footer();
                 break;
             default:
-                $SESSION->error = get_string('unknownerror', 'tool_coursearchiver');
-                $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php');
+                $SESSION->error = get_string('unknownerror', 'tool_mayhem');
+                $returnurl = new moodle_url('/admin/tool/mayhem/index.php');
                 redirect($returnurl);
         }
     }
 
 } else if (!empty($formdata) && !empty($mode)) {  // FORM 3 SUBMITTED, SHOW FORM 4.
     echo $OUTPUT->header();
-    echo $OUTPUT->heading_with_help(get_string('coursearchiver', 'tool_coursearchiver'), 'coursearchiver', 'tool_coursearchiver');
+    echo $OUTPUT->heading_with_help(get_string('mayhem', 'tool_mayhem'), 'mayhem', 'tool_mayhem');
 
     if (!empty($error)) {
-        echo $OUTPUT->container($error, 'coursearchiver_myformerror');
+        echo $OUTPUT->container($error, 'mayhem_myformerror');
     }
 
     $param = array("mode" => $mode, "formdata" => $formdata);
-    $mform = new tool_coursearchiver_step4_form(null, array("processor_data" => $param));
+    $mform = new tool_mayhem_step4_form(null, array("processor_data" => $param));
 
     $mform->display();
     echo $OUTPUT->footer();
 } else { // IN THE EVENT OF A FAILURE, JUST GO BACK TO THE BEGINNING.
-    $SESSION->error = get_string('unknownerror', 'tool_coursearchiver');
-    $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php');
+    $SESSION->error = get_string('unknownerror', 'tool_mayhem');
+    $returnurl = new moodle_url('/admin/tool/mayhem/index.php');
     redirect($returnurl);
 }

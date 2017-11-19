@@ -17,8 +17,8 @@
 /**
  * Step 1(Search form).
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->libdir . '/adminlib.php');
 header('X-Accel-Buffering: no');
 
 require_login();
-admin_externalpage_setup('toolcoursearchiver');
+admin_externalpage_setup('toolmayhem');
 
 global $SESSION;
 $error  = isset($SESSION->error) ? $SESSION->error : optional_param('error', false, PARAM_RAW);
@@ -38,33 +38,33 @@ $submitted  = optional_param('submitbutton', false, PARAM_RAW);
 
 // View optouts list button.
 if (!empty($submitted)) {
-    if ($submitted == get_string('optoutlist', 'tool_coursearchiver')) {
-        $returnurl = new moodle_url('/admin/tool/coursearchiver/optoutlist.php');
+    if ($submitted == get_string('optoutlist', 'tool_mayhem')) {
+        $returnurl = new moodle_url('/admin/tool/mayhem/optoutlist.php');
         redirect($returnurl);
     }
 }
 
 unset($SESSION->error);
 
-$mform = new tool_coursearchiver_step1_form(null);
+$mform = new tool_mayhem_step1_form(null);
 
 if ($mform->is_submitted()) {
     if ($mform->is_validated()) {
         $formdata = $mform->get_data();
-
+        
         // Data to set in the form.
         if (!empty($formdata)) {
             // Get savestate data.
             if (!empty($formdata->savestates)) {
                 $formdata->searches["savestates"] = $formdata->savestates;
-                if ($save = tool_coursearchiver_processor::get_save($formdata->savestates)) {
+                if ($save = tool_mayhem_processor::get_save($formdata->savestates)) {
                     $SESSION->formdata = $save->content;
                     $SESSION->resume = true;
-                    $returnurl = new moodle_url('/admin/tool/coursearchiver/step'.$save->step.'.php');
+                    $returnurl = new moodle_url('/admin/tool/mayhem/step'.$save->step.'.php');
                     redirect($returnurl);
                 } else {
-                    $SESSION->error = get_string('unknownerror', 'tool_coursearchiver');
-                    $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php');
+                    $SESSION->error = get_string('unknownerror', 'tool_mayhem');
+                    $returnurl = new moodle_url('/admin/tool/mayhem/index.php');
                     redirect($returnurl);
                 }
             }
@@ -84,37 +84,37 @@ if ($mform->is_submitted()) {
             }
 
             $SESSION->formdata = serialize($formdata->searches);
-            $returnurl = new moodle_url('/admin/tool/coursearchiver/step2.php');
+            $returnurl = new moodle_url('/admin/tool/mayhem/step2.php');
             redirect($returnurl);
         } else { // Form 1 data did not come across correctly.
             echo $OUTPUT->header();
-            echo $OUTPUT->heading_with_help(get_string('coursearchiver', 'tool_coursearchiver'),
-                                            'coursearchiver',
-                                            'tool_coursearchiver');
+            echo $OUTPUT->heading_with_help(get_string('mayhem', 'tool_mayhem'),
+                                            'mayhem',
+                                            'tool_mayhem');
             if (!empty($error)) {
-                echo $OUTPUT->container($error, 'coursearchiver_myformerror');
+                echo $OUTPUT->container($error, 'mayhem_myformerror');
             }
-            echo $OUTPUT->container(get_string('erroremptysearch', 'tool_coursearchiver'), 'coursearchiver_myformerror');
+            echo $OUTPUT->container(get_string('erroremptysearch', 'tool_mayhem'), 'mayhem_myformerror');
             $mform->display();
             echo $OUTPUT->footer();
         }
     } else {
         echo $OUTPUT->header();
-        echo $OUTPUT->heading_with_help(get_string('coursearchiver', 'tool_coursearchiver'),
-                                        'coursearchiver',
-                                        'tool_coursearchiver');
+        echo $OUTPUT->heading_with_help(get_string('mayhem', 'tool_mayhem'),
+                                        'mayhem',
+                                        'tool_mayhem');
         if (!empty($error)) {
-            echo $OUTPUT->container($error, 'coursearchiver_myformerror');
+            echo $OUTPUT->container($error, 'mayhem_myformerror');
         }
-        echo $OUTPUT->container(get_string('erroremptysearch', 'tool_coursearchiver'), 'coursearchiver_myformerror');
+        echo $OUTPUT->container(get_string('erroremptysearch', 'tool_mayhem'), 'mayhem_myformerror');
         $mform->display();
         echo $OUTPUT->footer();
     }
 } else {
     echo $OUTPUT->header();
-    echo $OUTPUT->heading_with_help(get_string('coursearchiver', 'tool_coursearchiver'), 'coursearchiver', 'tool_coursearchiver');
+    echo $OUTPUT->heading_with_help(get_string('mayhem', 'tool_mayhem'), 'mayhem', 'tool_mayhem');
     if (!empty($error)) {
-        echo $OUTPUT->container($error, 'coursearchiver_myformerror');
+        echo $OUTPUT->container($error, 'mayhem_myformerror');
     }
     $mform->display();
     echo $OUTPUT->footer();

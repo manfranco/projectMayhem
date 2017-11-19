@@ -17,8 +17,8 @@
 /**
  *  Step 2(Search Results).
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,7 +30,7 @@ require_once($CFG->libdir . '/adminlib.php');
 header('X-Accel-Buffering: no');
 
 require_login();
-admin_externalpage_setup('toolcoursearchiver');
+admin_externalpage_setup('toolmayhem');
 
 global $SESSION;
 $formdata   = isset($SESSION->formdata) ? $SESSION->formdata : optional_param('formdata', false, PARAM_RAW);
@@ -44,25 +44,25 @@ unset($SESSION->formdata);
 unset($SESSION->error);
 unset($SESSION->resume);
 
-tool_coursearchiver_processor::select_deselect_javascript();
+tool_mayhem_processor::select_deselect_javascript();
 
 if (!empty($submitted)) { // FORM 2 SUBMITTED.
 
-    if ($submitted == get_string('back', 'tool_coursearchiver')) { // Button to start over has been pressed.
+    if ($submitted == get_string('back', 'tool_mayhem')) { // Button to start over has been pressed.
         unset($SESSION->formdata);
         unset($SESSION->mode);
         unset($SESSION->error);
         unset($SESSION->selected);
-        $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php');
+        $returnurl = new moodle_url('/admin/tool/mayhem/index.php');
         redirect($returnurl);
     }
 
-    if ($submitted == get_string('save', 'tool_coursearchiver')) { // Save has been pressed.
-        tool_coursearchiver_processor::save_state(2, $title, $selected);
+    if ($submitted == get_string('save', 'tool_mayhem')) { // Save has been pressed.
+        tool_mayhem_processor::save_state(2, $title, $selected);
         $SESSION->resume = true;
         $SESSION->formdata = serialize($selected);
-        $SESSION->error = get_string('saved', 'tool_coursearchiver');
-        $returnurl = new moodle_url('/admin/tool/coursearchiver/step2.php');
+        $SESSION->error = get_string('saved', 'tool_mayhem');
+        $returnurl = new moodle_url('/admin/tool/mayhem/step2.php');
         redirect($returnurl);
     }
 
@@ -76,47 +76,42 @@ if (!empty($submitted)) { // FORM 2 SUBMITTED.
 
     if (empty($courses)) { // If 0 courses are selected, show message and form again.
         $SESSION->formdata = $formdata;
-        $SESSION->error = get_string('nocoursesselected', 'tool_coursearchiver');
-        $returnurl = new moodle_url('/admin/tool/coursearchiver/step2.php');
+        $SESSION->error = get_string('nocoursesselected', 'tool_mayhem');
+        $returnurl = new moodle_url('/admin/tool/mayhem/step2.php');
         redirect($returnurl);
     }
 
     switch($submitted){
-        case get_string('email', 'tool_coursearchiver'):
+        case get_string('hide', 'tool_mayhem'):
+            $SESSION->mode = tool_mayhem_processor::MODE_HIDE;
             $SESSION->formdata = serialize($courses);
-            $returnurl = new moodle_url('/admin/tool/coursearchiver/step3.php');
+            $returnurl = new moodle_url('/admin/tool/mayhem/step4.php');
             redirect($returnurl);
             break;
-        case get_string('hide', 'tool_coursearchiver'):
-            $SESSION->mode = tool_coursearchiver_processor::MODE_HIDE;
+        case get_string('archive', 'tool_mayhem'):
+            $SESSION->mode = tool_mayhem_processor::MODE_ARCHIVE;
             $SESSION->formdata = serialize($courses);
-            $returnurl = new moodle_url('/admin/tool/coursearchiver/step4.php');
+            $returnurl = new moodle_url('/admin/tool/mayhem/step4.php');
             redirect($returnurl);
             break;
-        case get_string('archive', 'tool_coursearchiver'):
-            $SESSION->mode = tool_coursearchiver_processor::MODE_ARCHIVE;
+        case get_string('delete', 'tool_mayhem'):
+            $SESSION->mode = tool_mayhem_processor::MODE_DELETE;
             $SESSION->formdata = serialize($courses);
-            $returnurl = new moodle_url('/admin/tool/coursearchiver/step4.php');
-            redirect($returnurl);
-            break;
-        case get_string('delete', 'tool_coursearchiver'):
-            $SESSION->mode = tool_coursearchiver_processor::MODE_DELETE;
-            $SESSION->formdata = serialize($courses);
-            $returnurl = new moodle_url('/admin/tool/coursearchiver/step4.php');
+            $returnurl = new moodle_url('/admin/tool/mayhem/step4.php');
             redirect($returnurl);
             break;
         default:
-            $SESSION->error = get_string('unknownerror', 'tool_coursearchiver');
-            $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php');
+            $SESSION->error = get_string('unknownerror', 'tool_mayhem');
+            $returnurl = new moodle_url('/admin/tool/mayhem/index.php');
             redirect($returnurl);
     }
 
 } else if (!empty($formdata)) {  // FORM 1 SUBMITTED, SHOW FORM 2.
     echo $OUTPUT->header();
-    echo $OUTPUT->heading_with_help(get_string('coursearchiver', 'tool_coursearchiver'), 'coursearchiver', 'tool_coursearchiver');
+    echo $OUTPUT->heading_with_help(get_string('mayhem', 'tool_mayhem'), 'mayhem', 'tool_mayhem');
 
     if (!empty($error)) {
-        echo $OUTPUT->container($error, 'coursearchiver_myformerror');
+        echo $OUTPUT->container($error, 'mayhem_myformerror');
     }
 
     $data = unserialize($formdata);
@@ -131,13 +126,13 @@ if (!empty($submitted)) { // FORM 2 SUBMITTED.
     }
 
 
-    $param = array("mode" => tool_coursearchiver_processor::MODE_COURSELIST, "searches" => $searches);
-    $mform = new tool_coursearchiver_step2_form(null, array("processor_data" => $param));
+    $param = array("mode" => tool_mayhem_processor::MODE_COURSELIST, "searches" => $searches);
+    $mform = new tool_mayhem_step2_form(null, array("processor_data" => $param));
 
     $mform->display();
     echo $OUTPUT->footer();
 } else { // IN THE EVENT OF A FAILURE, JUST GO BACK TO THE BEGINNING.
-    $SESSION->error = get_string('unknownerror', 'tool_coursearchiver');
-    $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php');
+    $SESSION->error = get_string('unknownerror', 'tool_mayhem');
+    $returnurl = new moodle_url('/admin/tool/mayhem/index.php');
     redirect($returnurl);
 }

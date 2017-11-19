@@ -17,15 +17,15 @@
 /**
  * Plugin version info.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin = new stdClass();
-$plugin->version   = 2017110302;                // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2017111801;                // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2014111000;                // Requires this Moodle version.
 $plugin->component = 'tool_mayhem';     // Full name of the plugin (used for diagnostics).
 $plugin->release  = '3.3.1 (Build: 2016090200)';

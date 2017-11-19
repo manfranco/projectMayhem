@@ -1,3 +1,4 @@
+
 <?php
 // This file is part of
 //
@@ -17,8 +18,8 @@
 /**
  * Step 2 form.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,11 +28,11 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Moodle form for step 2 of course archive tool
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_coursearchiver_step2_form extends moodleform {
+class tool_mayhem_step2_form extends moodleform {
 
     /**
      * The standard form definiton.
@@ -39,35 +40,37 @@ class tool_coursearchiver_step2_form extends moodleform {
      */
     public function definition () {
         $mform = $this->_form;
-        $mform->addElement('submit', 'submit_button', get_string('back', 'tool_coursearchiver'));
+        $mform->addElement('submit', 'submit_button', get_string('back', 'tool_mayhem'));
         $data  = $this->_customdata['processor_data'];
 
         $mform->addElement('hidden', 'formdata');
         $mform->setType('formdata', PARAM_RAW);
         $mform->setDefault('formdata', serialize($data['searches']));
 
-        $mform->addElement('header', 'searchresultshdr', get_string('courseselector', 'tool_coursearchiver'));
-
+ 
         // Do search here and display results.
-        $processor = new tool_coursearchiver_processor(array("mode" => $data["mode"], "data" => $data["searches"]));
-        $processor->execute(tool_coursearchiver_tracker::OUTPUT_HTML, null, $mform, $this);
+        $processor = new tool_mayhem_processor(array("mode" => $data["mode"], "data" => $data["searches"]));
+        $processor->execute(tool_mayhem_tracker::OUTPUT_HTML, null, $mform, $this);
+
+        $mform->addElement('filemanager', 'attachments', '', null,
+                           array('subdirs' => 0, 'maxbytes' => $maxbytes, 'areamaxbytes' => 10485760, 'maxfiles' => 50,
+                                 'accepted_types' => array('document'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL));
 
         if ($processor->total > 0) {
             $buttonarray = array();
-            $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('email', 'tool_coursearchiver'));
-            $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('hide', 'tool_coursearchiver'));
-            $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('archive', 'tool_coursearchiver'));
-            $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('delete', 'tool_coursearchiver'));
+            $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('hide', 'tool_mayhem'));
+            $buttonarray[] = &$mform->createElement('submit', 'submit_button', 'Upload content');
+            $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('delete', 'tool_mayhem'));
             $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
             $mform->closeHeaderBefore('buttonar');
 
             $savearray = array();
             $savearray[] = &$mform->createElement('text', 'save_title');
-            $savearray[] = &$mform->createElement('submit', 'submit_button', get_string('save', 'tool_coursearchiver'));
+            $savearray[] = &$mform->createElement('submit', 'submit_button', get_string('save', 'tool_mayhem'));
             $mform->addGroup($savearray, 'savear', '', array(' '), false);
             $mform->closeHeaderBefore('savear');
             $mform->setType('save_title', PARAM_TEXT);
-            $mform->setDefault('save_title', get_string('step2savetitle', 'tool_coursearchiver', date('l jS \of F Y h:i:s A')));
+            $mform->setDefault('save_title', get_string('step2savetitle', 'tool_mayhem', date('l jS \of F Y h:i:s A')));
         }
 
         $this->set_data($data);

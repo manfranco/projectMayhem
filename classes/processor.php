@@ -17,8 +17,8 @@
 /**
  * File containing processor class.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,11 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Processor class.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_coursearchiver_processor {
+class tool_mayhem_processor {
 
     /**
      * Only Show the Course list.
@@ -136,24 +136,24 @@ class tool_coursearchiver_processor {
      * @param object $form $this moodle_form object to use (optional)
      * @return void
      */
-    public function execute($outputtype = tool_coursearchiver_tracker::NO_OUTPUT, $tracker = null, $mform = null, $form = null) {
+    public function execute($outputtype = tool_mayhem_tracker::NO_OUTPUT, $tracker = null, $mform = null, $form = null) {
         if ($this->processstarted) {
-            throw new coding_exception(get_string('processstarted', 'tool_coursearchiver'));
+            throw new coding_exception(get_string('processstarted', 'tool_mayhem'));
         }
         $this->processstarted = true;
 
         if (empty($tracker)) {
-            $tracker = new tool_coursearchiver_tracker($outputtype, $this->mode);
+            $tracker = new tool_mayhem_tracker($outputtype, $this->mode);
         }
 
-        if ($outputtype == tool_coursearchiver_tracker::OUTPUT_HTML) {
+        if ($outputtype == tool_mayhem_tracker::OUTPUT_HTML) {
             if (!in_array($this->mode, array(self::MODE_HIDE,
                                              self::MODE_ARCHIVE,
                                              self::MODE_DELETE,
                                              self::MODE_HIDEEMAIL,
                                              self::MODE_ARCHIVEEMAIL))) {
                 if (empty($mform)) {
-                    throw new coding_exception(get_string('errornoform', 'tool_coursearchiver'));
+                    throw new coding_exception(get_string('errornoform', 'tool_mayhem'));
                 } else {
                     $tracker->form = $form;
                     $tracker->mform = $mform;
@@ -189,7 +189,7 @@ class tool_coursearchiver_processor {
                                     $tracker->output($currentcourse);
                                 } else {
                                     $tracker->error = true;
-                                    $this->errors[] = get_string('error_nocourseid', 'tool_coursearchiver');
+                                    $this->errors[] = get_string('error_nocourseid', 'tool_mayhem');
                                 }
                                 $tracker->jobsdone++;
                             } else {
@@ -239,7 +239,7 @@ class tool_coursearchiver_processor {
                     $this->total = count($unique);
                     $tracker->finish();
                 } else {
-                    $this->errors[] = get_string('errorinsufficientdata', 'tool_coursearchiver');
+                    $this->errors[] = get_string('errorinsufficientdata', 'tool_mayhem');
                 }
                 $tracker->results($this->mode, $this->total, $this->errors, $this->notices);
                 return $return;
@@ -258,7 +258,7 @@ class tool_coursearchiver_processor {
                                 $this->total++;
                             } else {
                                 $tracker->error = true;
-                                $this->errors[] = get_string('errorhidingcourse', 'tool_coursearchiver', $currentcourse["course"]);
+                                $this->errors[] = get_string('errorhidingcourse', 'tool_mayhem', $currentcourse["course"]);
                             }
                         }
                         $tracker->jobsdone++;
@@ -269,7 +269,7 @@ class tool_coursearchiver_processor {
                     $tracker->jobsize = 1;
                     $tracker->jobsdone++;
                     $tracker->output(false);
-                    $this->errors[] = get_string('errorinsufficientdata', 'tool_coursearchiver');
+                    $this->errors[] = get_string('errorinsufficientdata', 'tool_mayhem');
                 }
                 $tracker->results($this->mode, $this->total, $this->errors, $this->notices);
                 break;
@@ -286,7 +286,7 @@ class tool_coursearchiver_processor {
                             $this->total++;
                         } else {
                             $tracker->error = true;
-                            $this->errors[] = get_string('errorarchivingcourse', 'tool_coursearchiver', $currentcourse["course"]);
+                            $this->errors[] = get_string('errorarchivingcourse', 'tool_mayhem', $currentcourse["course"]);
                         }
                         $tracker->jobsdone++;
                         $tracker->output($currentcourse);
@@ -296,7 +296,7 @@ class tool_coursearchiver_processor {
                     $tracker->jobsize = 1;
                     $tracker->jobsdone++;
                     $tracker->output(false);
-                    $this->errors[] = get_string('errorinsufficientdata', 'tool_coursearchiver');
+                    $this->errors[] = get_string('errorinsufficientdata', 'tool_mayhem');
                 }
 
                 $tracker->results($this->mode, $this->total, $this->errors, $this->notices);
@@ -315,7 +315,7 @@ class tool_coursearchiver_processor {
                             $this->total++;
                         } else {
                             $tracker->error = true;
-                            $this->errors[] = get_string('errordeletingcourse', 'tool_coursearchiver', $currentcourse["course"]);
+                            $this->errors[] = get_string('errordeletingcourse', 'tool_mayhem', $currentcourse["course"]);
                         }
                         $tracker->jobsdone++;
                         $tracker->output($currentcourse);
@@ -325,7 +325,7 @@ class tool_coursearchiver_processor {
                     $tracker->jobsize = 1;
                     $tracker->jobsdone++;
                     $tracker->output(false);
-                    $this->errors[] = get_string('errorinsufficientdata', 'tool_coursearchiver');
+                    $this->errors[] = get_string('errorinsufficientdata', 'tool_mayhem');
                 }
 
                 $tracker->results($this->mode, $this->total, $this->errors, $this->notices);
@@ -342,7 +342,7 @@ class tool_coursearchiver_processor {
                             $this->total += $amountsent;
                         } else {
                             $tracker->error = true;
-                            $this->errors[] = get_string('errorsendingemail', 'tool_coursearchiver', $user["user"]);
+                            $this->errors[] = get_string('errorsendingemail', 'tool_mayhem', $user["user"]);
                         }
                         $tracker->jobsdone++;
                         $tracker->output(false);
@@ -351,7 +351,7 @@ class tool_coursearchiver_processor {
                     $tracker->jobsize = 1;
                     $tracker->jobsdone++;
                     $tracker->output(false);
-                    $this->errors[] = get_string('errorinsufficientdata', 'tool_coursearchiver');
+                    $this->errors[] = get_string('errorinsufficientdata', 'tool_mayhem');
                 }
                 $tracker->finish();
                 $tracker->results($this->mode, $this->total, $this->errors, $this->notices);
@@ -534,7 +534,7 @@ class tool_coursearchiver_processor {
             $archivefile = date("Y-m-d") . "{$suffix}-{$safeshort}.mbz";
             $archivepath = str_replace(str_split('\\/:*?"<>|'),
                                        '',
-                                       get_config('tool_coursearchiver', 'coursearchiverpath'));
+                                       get_config('tool_mayhem', 'mayhempath'));
 
             // Check for custom folder.
             $folder = $this->get_archive_folder();
@@ -547,7 +547,7 @@ class tool_coursearchiver_processor {
                 umask(0000);
                 // Create the directory for CourseArchival.
                 if (!mkdir($path, $CFG->directorypermissions, true)) {
-                    throw new Exception(get_string('errorarchivepath', 'tool_coursearchiver'));
+                    throw new Exception(get_string('errorarchivepath', 'tool_mayhem'));
                 }
             }
 
@@ -572,10 +572,10 @@ class tool_coursearchiver_processor {
                     if (!empty($file)) {
                         rename($dir . '/' . $file, $path . '/' . $archivefile);
                     } else {
-                        throw new Exception(get_string('errorbackup', 'tool_coursearchiver'));
+                        throw new Exception(get_string('errorbackup', 'tool_mayhem'));
                     }
                 } else {
-                    throw new Exception(get_string('errorbackup', 'tool_coursearchiver'));
+                    throw new Exception(get_string('errorbackup', 'tool_mayhem'));
                 }
             }
 
@@ -586,7 +586,7 @@ class tool_coursearchiver_processor {
                 // Remove Course.
                 delete_course($obj["course"]->id, false);
             } else {
-                throw new Exception(get_string('errorarchivefile', 'tool_coursearchiver'));
+                throw new Exception(get_string('errorarchivefile', 'tool_mayhem'));
             }
 
         } catch (Exception $e) {
@@ -621,7 +621,7 @@ class tool_coursearchiver_processor {
                 $bcinfo = backup_general_helper::get_backup_information_from_mbz($dir . '/' . $file);
             } catch (backup_helper_exception $e) {
                 throw new Exception('Error: ' . $file . ' ' .
-                                    get_string('errorvalidarchive', 'tool_coursearchiver') .
+                                    get_string('errorvalidarchive', 'tool_mayhem') .
                                     ' (' . $e->errorcode . ')');
                 continue;
             }
@@ -676,19 +676,19 @@ class tool_coursearchiver_processor {
             $admin = get_admin();
         }
 
-        $config = get_config('tool_coursearchiver');
+        $config = get_config('tool_mayhem');
 
         switch ($this->mode) {
             case self::MODE_HIDEEMAIL:
-                $subject = get_string('hidewarningsubject', 'tool_coursearchiver');
+                $subject = get_string('hidewarningsubject', 'tool_mayhem');
                 $message = $config->hidewarningemailsetting;
                 break;
             case self::MODE_ARCHIVEEMAIL:
-                $subject = get_string('archivewarningsubject', 'tool_coursearchiver');
+                $subject = get_string('archivewarningsubject', 'tool_mayhem');
                 $message = $config->archivewarningemailsetting;
                 break;
             default:
-                $this->errors[] = get_string('invalidmode', 'tool_coursearchiver');
+                $this->errors[] = get_string('invalidmode', 'tool_mayhem');
                 return false;
         }
 
@@ -701,12 +701,12 @@ class tool_coursearchiver_processor {
 
             // Make sure both the %to variable and the %courses variable exist in the message template.
             if (!strstr($message, '%to')) {
-                $this->errors[] = get_string('errormissingto', 'tool_coursearchiver');
+                $this->errors[] = get_string('errormissingto', 'tool_mayhem');
                 return 0;
             }
 
             if (!strstr($message, '%courses')) {
-                $this->errors[] = get_string('errormissingcourses', 'tool_coursearchiver');
+                $this->errors[] = get_string('errormissingcourses', 'tool_mayhem');
                 return 0;
             }
 
@@ -717,7 +717,7 @@ class tool_coursearchiver_processor {
             $message = strtr(nl2br($message), $vars);
 
             $event = new \core\message\message();
-            $event->component = 'tool_coursearchiver';
+            $event->component = 'tool_mayhem';
             $event->name = 'courseowner';
             $event->userfrom = core_user::get_noreply_user();
             $event->userto = $obj["user"];
@@ -728,13 +728,13 @@ class tool_coursearchiver_processor {
             $event->smallmessage = $subject;
             $event->notification = '1';
             $event->contexturl = $CFG->wwwroot;
-            $event->contexturlname = get_string('coursearchiver', 'tool_coursearchiver');
+            $event->contexturlname = get_string('mayhem', 'tool_mayhem');
             $event->replyto = $admin->email;
 
             try {
                 message_send($event);
             } catch (Exception $e) {
-                $this->errors[] = get_string('errorsendingemail', 'tool_coursearchiver', $obj["user"]);
+                $this->errors[] = get_string('errorsendingemail', 'tool_mayhem', $obj["user"]);
                 return false;
             }
             return 1;
@@ -824,7 +824,7 @@ class tool_coursearchiver_processor {
     protected function is_opted_out($courseid) {
         global $DB;
 
-        $config = get_config('tool_coursearchiver');
+        $config = get_config('tool_mayhem');
         $months = $config->optoutmonthssetting;
         if (empty($months)) {
             $months = 24; // Fall back to 24 months.
@@ -835,7 +835,7 @@ class tool_coursearchiver_processor {
         $optouttime = $date->getTimestamp();
 
         $sql = "SELECT *
-                  FROM {tool_coursearchiver_optout} c
+                  FROM {tool_mayhem_optout} c
                  WHERE c.courseid = :courseid
                        AND optouttime > $optouttime";
         $params['courseid'] = $courseid;
@@ -864,7 +864,7 @@ class tool_coursearchiver_processor {
         $record->content    = serialize($data);
         $record->step       = $stepid;
         $record->savedate   = $date->getTimestamp();
-        if ($DB->insert_record('tool_coursearchiver_saves', $record)) {
+        if ($DB->insert_record('tool_mayhem_saves', $record)) {
             return true;
         } else {
             return false;
@@ -879,7 +879,7 @@ class tool_coursearchiver_processor {
     public static function get_save($id) {
         global $DB;
 
-        if ($result = $DB->get_record('tool_coursearchiver_saves', array('id' => $id))) {
+        if ($result = $DB->get_record('tool_mayhem_saves', array('id' => $id))) {
             return $result;
         } else {
             return false;
@@ -894,10 +894,10 @@ class tool_coursearchiver_processor {
     public static function get_saves() {
         global $DB;
 
-        if ($result = $DB->get_records_select_menu('tool_coursearchiver_saves',
+        if ($result = $DB->get_records_select_menu('tool_mayhem_saves',
                                                    '', array(), 'savedate', 'id, title')) {
             $counter = 0;
-            $saves = array("0" => get_string('resumeselect', 'tool_coursearchiver'));
+            $saves = array("0" => get_string('resumeselect', 'tool_mayhem'));
             foreach ($result as $key => $value) {
                 $saves[$key] = $value;
                 $counter++;
@@ -907,7 +907,7 @@ class tool_coursearchiver_processor {
             }
             return $saves;
         } else {
-            return array(get_string('resumenone', 'tool_coursearchiver'));
+            return array(get_string('resumenone', 'tool_mayhem'));
         }
     }
 
@@ -1057,9 +1057,9 @@ class tool_coursearchiver_processor {
         global $CFG;
 
         if ($this->mode == self::MODE_HIDEEMAIL) {
-            $optoutbutton = get_string('optouthide', 'tool_coursearchiver');
+            $optoutbutton = get_string('optouthide', 'tool_mayhem');
         } else if ($this->mode == self::MODE_ARCHIVEEMAIL) {
-            $optoutbutton = get_string('optoutarchive', 'tool_coursearchiver');
+            $optoutbutton = get_string('optoutarchive', 'tool_mayhem');
         }
 
         $courses = array();
@@ -1081,7 +1081,7 @@ class tool_coursearchiver_processor {
                                               ) .
                                               html_writer::tag('td', '', array('width' => '5px')) .
                                               html_writer::tag('td',
-                                                   html_writer::link(new moodle_url('/admin/tool/coursearchiver/optout.php',
+                                                   html_writer::link(new moodle_url('/admin/tool/mayhem/optout.php',
                                                                                     array('courseid' => $course->id,
                                                                                           'userid' => $obj["user"]->id,
                                                                                           'key' => $key)),
@@ -1090,7 +1090,7 @@ class tool_coursearchiver_processor {
                                               array('style' => 'background-color:' . $rowcolor)
                                      );
             } else { // This course is not included in the email.
-                $this->notices[] = get_string('noticecoursehidden', 'tool_coursearchiver', $course);
+                $this->notices[] = get_string('noticecoursehidden', 'tool_mayhem', $course);
             }
         }
         $courses[] = html_writer::end_tag('table');
@@ -1107,17 +1107,17 @@ class tool_coursearchiver_processor {
         global $PAGE;
         $PAGE->requires->js_amd_inline('
             require(["jquery"], function($) {
-                $(".coursearchiver_selectall #id_toggle").click(function() {
+                $(".mayhem_selectall #id_toggle").click(function() {
                     var text = $(this).val().length > 0 ? $(this).val() : $(this).text().trim();
-                    if("'.get_string('selectall', 'tool_coursearchiver').'" === text) {
+                    if("'.get_string('selectall', 'tool_mayhem').'" === text) {
                          $("input:checkbox").prop("checked", true);
-                         $(".coursearchiver_selectall #id_toggle").val("'.get_string('deselectall', 'tool_coursearchiver').'");
-                         $(".coursearchiver_selectall #id_toggle").text("'.get_string('deselectall', 'tool_coursearchiver').'");
+                         $(".mayhem_selectall #id_toggle").val("'.get_string('deselectall', 'tool_mayhem').'");
+                         $(".mayhem_selectall #id_toggle").text("'.get_string('deselectall', 'tool_mayhem').'");
                     }
-                    else if("'.get_string('deselectall', 'tool_coursearchiver').'" === text) {
+                    else if("'.get_string('deselectall', 'tool_mayhem').'" === text) {
                          $("input:checkbox").prop("checked", false);
-                         $(".coursearchiver_selectall #id_toggle").val("'.get_string('selectall', 'tool_coursearchiver').'");
-                         $(".coursearchiver_selectall #id_toggle").text("'.get_string('selectall', 'tool_coursearchiver').'");
+                         $(".mayhem_selectall #id_toggle").val("'.get_string('selectall', 'tool_mayhem').'");
+                         $(".mayhem_selectall #id_toggle").text("'.get_string('selectall', 'tool_mayhem').'");
                     }
                 });
             });
@@ -1133,7 +1133,7 @@ class tool_coursearchiver_processor {
         global $CFG, $DB, $SITE;
 
         $sql = "SELECT *
-                  FROM {tool_coursearchiver_optout}
+                  FROM {tool_mayhem_optout}
                  ORDER BY optouttime";
         $optouts = $DB->get_records_sql($sql);
 
@@ -1141,7 +1141,7 @@ class tool_coursearchiver_processor {
         $now = $date->getTimestamp();
 
         $rowcolor = $rowcolor == "#FFF" ? "#EEE" : "#FFF";
-        $courses .= html_writer::link(new moodle_url('/admin/tool/coursearchiver/index.php'),
+        $courses .= html_writer::link(new moodle_url('/admin/tool/mayhem/index.php'),
                                                      get_string('back'));
         $courses .= html_writer::start_tag('table', array('style' => 'border-collapse: collapse;width: 100%;',
                                                           'cellpadding' => '5'));
@@ -1149,9 +1149,9 @@ class tool_coursearchiver_processor {
                                      html_writer::tag('th',
                                                       get_string('course')) .
                                      html_writer::tag('th',
-                                                      get_string('optouttime', 'tool_coursearchiver')) .
+                                                      get_string('optouttime', 'tool_mayhem')) .
                                      html_writer::tag('th',
-                                                      get_string('optoutby', 'tool_coursearchiver')) .
+                                                      get_string('optoutby', 'tool_mayhem')) .
                                      html_writer::tag('th',
                                                       get_string('actions'),
                                                       array('width' => '100px')),
@@ -1165,7 +1165,7 @@ class tool_coursearchiver_processor {
                 // Create security key for each link.
                 $key = sha1($CFG->dbpass . $course->id . $optout->userid);
 
-                $config = get_config('tool_coursearchiver');
+                $config = get_config('tool_mayhem');
                 if (empty($course->optoutmonthssetting)) {
                     $course->optoutmonthssetting = 24; // Fall back to 24 months.
                 }
@@ -1184,13 +1184,13 @@ class tool_coursearchiver_processor {
                                                                      array('target' => '_blank'))
                                               ) .
                                               html_writer::tag('td',
-                                                               get_string('optoutleft', 'tool_coursearchiver', $ago),
+                                                               get_string('optoutleft', 'tool_mayhem', $ago),
                                                                array('align' => 'center')) .
                                               html_writer::tag('td',
                                                                $user->firstname . ' ' . $user->lastname,
                                                                array('align' => 'center')) .
                                               html_writer::tag('td',
-                                                   html_writer::link(new moodle_url('/admin/tool/coursearchiver/optin.php',
+                                                   html_writer::link(new moodle_url('/admin/tool/mayhem/optin.php',
                                                                                     array('courseid' => $course->id,
                                                                                           'userid' => $optout->userid,
                                                                                           'key' => $key)),

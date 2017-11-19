@@ -17,8 +17,8 @@
 /**
  * CLI Bulk course archive script.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -83,7 +83,7 @@ Options:
 -v, --verbose           Maximum output from tool (optional)
 
 Example:
-php admin/tool/coursearchiver/cli/coursearchiver.php --short=ma101 --idnum=2012 --mode=archive --verbose
+php admin/tool/mayhem/cli/mayhem.php --short=ma101 --idnum=2012 --mode=archive --verbose
 ";
 
 if (!empty($options['help'])) {
@@ -93,47 +93,47 @@ if (!empty($options['help'])) {
 
 // Confirm that the mode is valid.
 $modes = array(
-    'courselist' => tool_coursearchiver_processor::MODE_COURSELIST,
-    'emaillist' => tool_coursearchiver_processor::MODE_GETEMAILS,
-    'hideemail' => tool_coursearchiver_processor::MODE_HIDEEMAIL,
-    'hide' => tool_coursearchiver_processor::MODE_HIDE,
-    'archiveemail' => tool_coursearchiver_processor::MODE_ARCHIVEEMAIL,
-    'archive' => tool_coursearchiver_processor::MODE_ARCHIVE,
-    'delete' => tool_coursearchiver_processor::MODE_DELETE,
+    'courselist' => tool_mayhem_processor::MODE_COURSELIST,
+    'emaillist' => tool_mayhem_processor::MODE_GETEMAILS,
+    'hideemail' => tool_mayhem_processor::MODE_HIDEEMAIL,
+    'hide' => tool_mayhem_processor::MODE_HIDE,
+    'archiveemail' => tool_mayhem_processor::MODE_ARCHIVEEMAIL,
+    'archive' => tool_mayhem_processor::MODE_ARCHIVE,
+    'delete' => tool_mayhem_processor::MODE_DELETE,
 );
 
 if (!isset($options['mode']) || empty($modes[$options['mode']])) {
-    echo get_string('invalidmode', 'tool_coursearchiver')."\n";
+    echo get_string('invalidmode', 'tool_mayhem')."\n";
     die();
 }
 
 $processoroptions['mode'] = $modes[$options['mode']];
 
 if (!empty($options['id']) && !is_numeric($options['id'])) {
-    echo get_string('errornonnumericid', 'tool_coursearchiver'). "\n";
+    echo get_string('errornonnumericid', 'tool_mayhem'). "\n";
     die();
 }
 
 if (!empty($options['access']) && !is_numeric($options['access'])) {
-    echo get_string('errornonnumericaccess', 'tool_coursearchiver'). "\n";
+    echo get_string('errornonnumericaccess', 'tool_mayhem'). "\n";
     die();
 }
 
-$output = !empty($options['verbose']) ? tool_coursearchiver_tracker::OUTPUT_CLI : tool_coursearchiver_tracker::NO_OUTPUT;
+$output = !empty($options['verbose']) ? tool_mayhem_tracker::OUTPUT_CLI : tool_mayhem_tracker::NO_OUTPUT;
 $question = "";
 switch ($processoroptions['mode']) {
-    case tool_coursearchiver_processor::MODE_COURSELIST:
+    case tool_mayhem_processor::MODE_COURSELIST:
         // Show courselist and die...
-        $processor = new tool_coursearchiver_processor(array("mode" => tool_coursearchiver_processor::MODE_COURSELIST,
+        $processor = new tool_mayhem_processor(array("mode" => tool_mayhem_processor::MODE_COURSELIST,
                                                              "data" => $options));
         if (!empty($options['empty'])) {
             $processor->emptyonly = true;
         }
-        $processor->execute(tool_coursearchiver_tracker::OUTPUT_CLI);
+        $processor->execute(tool_mayhem_tracker::OUTPUT_CLI);
         die();
     break;
-    case tool_coursearchiver_processor::MODE_GETEMAILS:
-        $processor = new tool_coursearchiver_processor(array("mode" => tool_coursearchiver_processor::MODE_COURSELIST,
+    case tool_mayhem_processor::MODE_GETEMAILS:
+        $processor = new tool_mayhem_processor(array("mode" => tool_mayhem_processor::MODE_COURSELIST,
                                                              "data" => $options));
         if (!empty($options['empty'])) {
             $processor->emptyonly = true;
@@ -141,17 +141,17 @@ switch ($processoroptions['mode']) {
         $courses = $processor->execute($output);
 
         if (!empty($courses)) {
-            $processor = new tool_coursearchiver_processor(array("mode" => tool_coursearchiver_processor::MODE_GETEMAILS,
+            $processor = new tool_mayhem_processor(array("mode" => tool_mayhem_processor::MODE_GETEMAILS,
                                                                  "data" => $courses));
-            $processor->execute(tool_coursearchiver_tracker::OUTPUT_CLI);
+            $processor->execute(tool_mayhem_tracker::OUTPUT_CLI);
         } else {
-            echo get_string('cli_cannot_continue', 'tool_coursearchiver');
+            echo get_string('cli_cannot_continue', 'tool_mayhem');
         }
         die();
     break;
-    case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-    case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
-        $processor = new tool_coursearchiver_processor(array("mode" => tool_coursearchiver_processor::MODE_COURSELIST,
+    case tool_mayhem_processor::MODE_HIDEEMAIL:
+    case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
+        $processor = new tool_mayhem_processor(array("mode" => tool_mayhem_processor::MODE_COURSELIST,
                                                              "data" => $options));
         if (!empty($options['empty'])) {
             $processor->emptyonly = true;
@@ -159,24 +159,24 @@ switch ($processoroptions['mode']) {
         $courses = $processor->execute($output);
 
         if (!empty($courses)) {
-            $processor = new tool_coursearchiver_processor(array("mode" => tool_coursearchiver_processor::MODE_GETEMAILS,
+            $processor = new tool_mayhem_processor(array("mode" => tool_mayhem_processor::MODE_GETEMAILS,
                                                                  "data" => $courses));
-            $selected = $processor->execute(tool_coursearchiver_tracker::OUTPUT_CLI);
+            $selected = $processor->execute(tool_mayhem_tracker::OUTPUT_CLI);
         }
 
         // No courses matched the search or no owners exist on the courses that do match.
         if (empty($courses) || empty($selected)) {
-            echo get_string('cli_cannot_continue', 'tool_coursearchiver');
+            echo get_string('cli_cannot_continue', 'tool_mayhem');
             die();
         }
 
-        $question = get_string('cli_question_'.$options['mode'], 'tool_coursearchiver', count($selected));
+        $question = get_string('cli_question_'.$options['mode'], 'tool_mayhem', count($selected));
     break;
-    case tool_coursearchiver_processor::MODE_HIDE:
-    case tool_coursearchiver_processor::MODE_ARCHIVE:
-    case tool_coursearchiver_processor::MODE_DELETE:
+    case tool_mayhem_processor::MODE_HIDE:
+    case tool_mayhem_processor::MODE_ARCHIVE:
+    case tool_mayhem_processor::MODE_DELETE:
         // Show courselist and die...
-        $processor = new tool_coursearchiver_processor(array("mode" => tool_coursearchiver_processor::MODE_COURSELIST,
+        $processor = new tool_mayhem_processor(array("mode" => tool_mayhem_processor::MODE_COURSELIST,
                                                              "data" => $options));
         if (!empty($options['empty'])) {
             $processor->emptyonly = true;
@@ -188,7 +188,7 @@ switch ($processoroptions['mode']) {
             die();
         }
 
-        $question = get_string('cli_question_'.$options['mode'], 'tool_coursearchiver', count($courses));
+        $question = get_string('cli_question_'.$options['mode'], 'tool_mayhem', count($courses));
     break;
 }
 
@@ -205,20 +205,20 @@ if (!empty($question)) {
 }
 
 switch ($processoroptions['mode']) {
-    case tool_coursearchiver_processor::MODE_HIDE:
-    case tool_coursearchiver_processor::MODE_DELETE:
-        $processor = new tool_coursearchiver_processor(array("mode" => $processoroptions['mode'], "data" => $courses));
-        $processor->execute(tool_coursearchiver_tracker::OUTPUT_CLI);
+    case tool_mayhem_processor::MODE_HIDE:
+    case tool_mayhem_processor::MODE_DELETE:
+        $processor = new tool_mayhem_processor(array("mode" => $processoroptions['mode'], "data" => $courses));
+        $processor->execute(tool_mayhem_tracker::OUTPUT_CLI);
         break;
-    case tool_coursearchiver_processor::MODE_ARCHIVE:
-        $processor = new tool_coursearchiver_processor(array("mode" => $processoroptions['mode'], "data" => $courses));
+    case tool_mayhem_processor::MODE_ARCHIVE:
+        $processor = new tool_mayhem_processor(array("mode" => $processoroptions['mode'], "data" => $courses));
         if (!empty($options['location'])) {
             $processor->folder = $options['location'];
         }
-        $processor->execute(tool_coursearchiver_tracker::OUTPUT_CLI);
+        $processor->execute(tool_mayhem_tracker::OUTPUT_CLI);
         break;
-    case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-    case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
+    case tool_mayhem_processor::MODE_HIDEEMAIL:
+    case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
         $owners = array();
         foreach ($selected as $s) {
             $t = explode("_", $s);
@@ -232,8 +232,8 @@ switch ($processoroptions['mode']) {
                 }
             }
         }
-        $processor = new tool_coursearchiver_processor(array("mode" => $processoroptions['mode'], "data" => $owners));
-        $processor->execute(tool_coursearchiver_tracker::OUTPUT_CLI);
+        $processor = new tool_mayhem_processor(array("mode" => $processoroptions['mode'], "data" => $owners));
+        $processor->execute(tool_mayhem_tracker::OUTPUT_CLI);
     break;
     default:
         echo "\nFAILED TO CONTINUE";

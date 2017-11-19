@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="tool/coursearchiver/db" VERSION="20141103" COMMENT="XMLDB file for Moodle tool/coursearchiver"
+<XMLDB PATH="tool/mayhem/db" VERSION="20141103" COMMENT="XMLDB file for Moodle tool/mayhem"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="tool_coursearchiver_optout" COMMENT="Table to store course optouts">
+    <TABLE NAME="tool_mayhem_optout" COMMENT="Table to store course optouts">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of user who opted out."/>
@@ -20,7 +20,7 @@
         <INDEX NAME="optouttime" UNIQUE="false" FIELDS="optouttime" COMMENT="Index on optouttime"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="tool_coursearchiver_saves" COMMENT="Table to store step results">
+    <TABLE NAME="tool_mayhem_saves" COMMENT="Table to store step results">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Name given to save."/>

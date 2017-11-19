@@ -17,7 +17,7 @@
 /**
  * Optout page.
  *
- * @package    tool_coursearchiver
+ * @package    tool_mayhem
  * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,21 +30,21 @@ require_once($CFG->libdir.'/adminlib.php');
 header('X-Accel-Buffering: no');
 
 require_login();
-admin_externalpage_setup('toolcoursearchiver');
+admin_externalpage_setup('toolmayhem');
 
 $courseid   = required_param('courseid', PARAM_INT);
 $userid     = required_param('userid', PARAM_INT);
 $key        = required_param('key', PARAM_ALPHANUMEXT);
 
 $context = context_system::instance();
-$PAGE->set_url(new \moodle_url('/admin/tool/coursearchiver/optin.php'));
-$PAGE->navbar->add(get_string('coursearchiver', 'tool_coursearchiver'));
+$PAGE->set_url(new \moodle_url('/admin/tool/mayhem/optin.php'));
+$PAGE->navbar->add(get_string('mayhem', 'tool_mayhem'));
 $PAGE->set_context($context);
 $PAGE->set_pagelayout('admin');
-$PAGE->set_title(get_string('coursearchiver', 'tool_coursearchiver'));
+$PAGE->set_title(get_string('mayhem', 'tool_mayhem'));
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading_with_help(get_string('coursearchiver', 'tool_coursearchiver'), 'coursearchiver', 'tool_coursearchiver');
+echo $OUTPUT->heading_with_help(get_string('mayhem', 'tool_mayhem'), 'mayhem', 'tool_mayhem');
 
 // Check to see if the attempt is coming from a valid email.
 if (sha1($CFG->dbpass . $courseid . $userid) == $key) {
@@ -53,16 +53,16 @@ if (sha1($CFG->dbpass . $courseid . $userid) == $key) {
         $optouttime = $date->getTimestamp();
 
         $params = array("courseid" => $courseid);
-        $DB->delete_records('tool_coursearchiver_optout', $params);
+        $DB->delete_records('tool_mayhem_optout', $params);
 
         echo $OUTPUT->container(html_writer::tag('div',
-                                get_string('course_readded', 'tool_coursearchiver', $course),
+                                get_string('course_readded', 'tool_mayhem', $course),
                                 array('style' => 'margin: 15px;text-align:center;font-size:1.4em;font-weight:bold')));
     } else {
-        echo $OUTPUT->container(get_string('error_nocourseid', 'tool_coursearchiver'), 'coursearchiver_myformerror');
+        echo $OUTPUT->container(get_string('error_nocourseid', 'tool_mayhem'), 'mayhem_myformerror');
     }
 } else { // You shouldn't be here.
-    echo $OUTPUT->container(get_string('error_key', 'tool_coursearchiver'), 'coursearchiver_myformerror');
+    echo $OUTPUT->container(get_string('error_key', 'tool_mayhem'), 'mayhem_myformerror');
 }
 
 echo $OUTPUT->footer();

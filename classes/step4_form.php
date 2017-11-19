@@ -17,8 +17,8 @@
 /**
  * Bulk course upload step 4 form.
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,11 +27,11 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * Moodle form for step 4 of course archive tool
  *
- * @package    tool_coursearchiver
- * @copyright  2015 Matthew Davidson
+ * @package    tool_mayhem
+ * @copyright  2017 Proyecto 50
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class tool_coursearchiver_step4_form extends moodleform {
+class tool_mayhem_step4_form extends moodleform {
 
     /**
      * The standard form definiton.
@@ -51,47 +51,47 @@ class tool_coursearchiver_step4_form extends moodleform {
 
         $count = count(unserialize($data["formdata"]));
         if (empty($count)) {
-            $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php',
-                                        array("error" => get_string('unknownerror', 'tool_coursearchiver')));
+            $returnurl = new moodle_url('/admin/tool/mayhem/index.php',
+                                        array("error" => get_string('unknownerror', 'tool_mayhem')));
             redirect($returnurl);
         }
 
         switch($data["mode"]) {
-            case tool_coursearchiver_processor::MODE_HIDEEMAIL:
-                $message = get_string('confirmmessagehideemail', 'tool_coursearchiver', $count);
+            case tool_mayhem_processor::MODE_HIDEEMAIL:
+                $message = get_string('confirmmessagehideemail', 'tool_mayhem', $count);
                 break;
-            case tool_coursearchiver_processor::MODE_ARCHIVEEMAIL:
-                $message = get_string('confirmmessagearchiveemail', 'tool_coursearchiver', $count);
+            case tool_mayhem_processor::MODE_ARCHIVEEMAIL:
+                $message = get_string('confirmmessagearchiveemail', 'tool_mayhem', $count);
                 break;
-            case tool_coursearchiver_processor::MODE_HIDE:
-                $message = get_string('confirmmessagehide', 'tool_coursearchiver', $count);
+            case tool_mayhem_processor::MODE_HIDE:
+                $message = get_string('confirmmessagehide', 'tool_mayhem', $count);
                 break;
-            case tool_coursearchiver_processor::MODE_ARCHIVE:
-                $message = get_string('confirmmessagearchive', 'tool_coursearchiver', $count);
+            case tool_mayhem_processor::MODE_ARCHIVE:
+                $message = get_string('confirmmessagearchive', 'tool_mayhem', $count);
                 break;
-            case tool_coursearchiver_processor::MODE_DELETE:
-                $message = get_string('confirmmessagedelete', 'tool_coursearchiver', $count);
+            case tool_mayhem_processor::MODE_DELETE:
+                $message = get_string('confirmmessagedelete', 'tool_mayhem', $count);
                 break;
             default:
-                $returnurl = new moodle_url('/admin/tool/coursearchiver/index.php',
-                                            array("error" => get_string('unknownerror', 'tool_coursearchiver')));
+                $returnurl = new moodle_url('/admin/tool/mayhem/index.php',
+                                            array("error" => get_string('unknownerror', 'tool_mayhem')));
                 redirect($returnurl);
         }
 
         $mform->addElement('html',
-                           '<div class="coursearchiver_myformconfirm">' .
-                                get_string('confirmmessage', 'tool_coursearchiver', $message) .
+                           '<div class="mayhem_myformconfirm">' .
+                                get_string('confirmmessage', 'tool_mayhem', $message) .
                            '</div>');
 
-        if ($data["mode"] == tool_coursearchiver_processor::MODE_ARCHIVE) {
-            $mform->addElement('text', 'folder', get_string('archivelocation', 'tool_coursearchiver'));
+        if ($data["mode"] == tool_mayhem_processor::MODE_ARCHIVE) {
+            $mform->addElement('text', 'folder', get_string('archivelocation', 'tool_mayhem'));
             $mform->setType('folder', PARAM_TEXT);
             $mform->setDefault('folder', date('Y'));
         }
 
         $buttonarray = array();
-        $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('back', 'tool_coursearchiver'));
-        $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('confirm', 'tool_coursearchiver'));
+        $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('back', 'tool_mayhem'));
+        $buttonarray[] = &$mform->createElement('submit', 'submit_button', get_string('confirm', 'tool_mayhem'));
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->closeHeaderBefore('buttonar');
 
